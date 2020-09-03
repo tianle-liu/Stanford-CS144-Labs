@@ -8,10 +8,15 @@ using namespace std;
 
 void get_URL(const string &host, const string &path) {
     // Your code here.
-	ad = Address(host, "http");
-	socket = Socket();
+	Address ad(host, "http");
+	TCPSocket socket{};
 	socket.connect(ad);
-
+	string req = "GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\n\r\n";
+	socket.write(req);
+	socket.shutdown(SHUT_WR);
+	while(!socket.eof()) {
+		cout << socket.read();
+	}
     // You will need to connect to the "http" service on
     // the computer whose name is in the "host" string,
     // then request the URL path given in the "path" string.
